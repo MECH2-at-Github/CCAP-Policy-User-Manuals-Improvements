@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         CCAP Policy & User Manual Improvements
-// @version      v.01
+// @version      v.02
 // @description  Changes javascript links to HTML links (for new tabs), adds/updates links to statute.
 // @author       MECH2
 // @include      https://www.dhs.state.mn.us/main/idcplg?IdcService=GET_DYNAMIC_CONVERSION&RevisionSelectionMethod=LatestReleased&dDocName=ccap*
@@ -10,14 +10,15 @@
 console.log("CCAP Policy & User Manuals Improvements - loaded")
 !function jsLinksToHrefLinks() {
     Array.from(document.querySelectorAll('#mainContent a'))
-        .filter(a => a.href.indexOf("javascript:link") > -1)
-        .forEach(link => { link.href = "https://www.dhs.state.mn.us/main/idcplg?IdcService=GET_DYNAMIC_CONVERSION&RevisionSelectionMethod=LatestReleased&dDocName=" + link.href.split("'")[1] });
+        ?.filter(a => a.href.indexOf("javascript:link") > -1)
+        ?.forEach(link => { link.href = "https://www.dhs.state.mn.us/main/idcplg?IdcService=GET_DYNAMIC_CONVERSION&RevisionSelectionMethod=LatestReleased&dDocName=" + link.href.split("'")[1] });
 }();
 
 !function addLinksToStatutes() {
     let statuteDescriptionMap = new Map([
         // ["number", "description"],
-        ["119B.011", "description"],
+        ["119B.011", "Description"],
+
         ["142E.01", "CCAP General Program Definitions"],
         ["142E.03", "Duties of Counties"],
         ["142E.04", "BSF Subprogram Definitions"],
@@ -28,10 +29,14 @@ console.log("CCAP Policy & User Manuals Improvements - loaded")
         ["142E.14", "County Contribution"],
         ["142E.15", "BSF Sliding Scale"],
         ["142E.17", "CCAP Rates"],
+
         ["142G", "MFIP Program - all sections"],
+        ["142G.01", "Establishing MFIP"],
         ["142G.90", "DWP Program"],
+
         ["256P.05", "Self-Employment Earnings"],
         ["256P.06", "Income Calculations"],
+
         ["3400.0020", "Glossary / Definitions"],
         ["3400.0035", "Application Procedure"],
         ["3400.0040", "Eligibility Requirements"],
@@ -136,18 +141,19 @@ console.log("CCAP Policy & User Manuals Improvements - loaded")
     function changeStatutesIntoLinks() {
         function formStatuteDataIntoLink(hrefPage, hrefNumber, textContent) { return '<a target="_blank" href=' + hrefPage + hrefNumber + '>' + textContent + '</a>' };
         function formStatuteTextContent(statuteType, statuteNumbers, statuteDescription, statuteRenumberedTo) { return statuteType + " " + statuteNumbers + (statuteDescription ? " (" + statuteDescription + ")" : "") + (statuteRenumberedTo ? " - renumbered to " + statuteRenumberedTo : "") };
-        return statuteElement.innerHTML?.trim().replace(/<br>$/, "").split('<br>')?.map( statuteText => {
-            statuteText = statuteText.replace(/[, ]*$/, "")
+        return statuteElement.innerHTML?.trim().replace(/<br>$/, "")?.split('<br>')?.map( statuteText => {
+            statuteText = statuteText?.replace(/[, ]*$/, "")
+            if (!statuteText) { console.log("no statute text, changeStatutesIntoLinks"); return };
             let [ statuteLink, statuteNumber, fullStatuteNumbers, statuteType ] = getFirstStatuteAndBaseLink(statuteText)
-            let newStatuteNumber = statuteMapReplacements.get(statuteNumber)
-            let addedDescription = statuteDescriptionMap.get(newStatuteNumber ?? statuteNumber) ?? ""
+            let newStatuteNumber = statuteMapReplacements?.get(statuteNumber)
+            let addedDescription = statuteDescriptionMap?.get(newStatuteNumber ?? statuteNumber) ?? ""
             return formStatuteDataIntoLink(statuteLink, (newStatuteNumber ?? statuteNumber), formStatuteTextContent(statuteType, fullStatuteNumbers, addedDescription, newStatuteNumber))
-        }).join('<br>\n')
+        })?.join('<br>\n')
     };
     function getFirstStatuteAndBaseLink(textContent) {
         return textContent?.includes("Minnesota Statute")
-            ? [ "https://www.revisor.mn.gov/statutes/cite/", textContent.match(/Minnesota (?:Statute|Statutes) (([0-9]{3,}[A-Z])(\.[0-9]+)?).*/)[1], textContent.split(/Minnesota Statute[s]? /)[1], "Minnesota Statutes" ]
-        : [ 'https://www.revisor.mn.gov/rules/', textContent.match(/Minnesota (?:Rule|Rules) ([0-9]+.[0-9]+).*/i)[1], textContent.split(/Minnesota Rule[s]? /)[1], "Minnesota Rules" ]
+            ? [ "https://www.revisor.mn.gov/statutes/cite/", textContent?.match(/Minnesota Statute[s]? (([0-9]{2,3}[A-Z]?)(\.[0-9]+)?).*/)[1], textContent?.split(/Minnesota Statute[s]? /)[1], "Minnesota Statutes" ]
+        : [ 'https://www.revisor.mn.gov/rules/', textContent?.match(/Minnesota Rule[s]? ([0-9]+.[0-9]+).*/i)[1], textContent?.split(/Minnesota Rule[s]? /)[1], "Minnesota Rules" ]
     };
 }();
 
