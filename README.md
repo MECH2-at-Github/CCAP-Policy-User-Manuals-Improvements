@@ -1,3 +1,5 @@
+This script is designed to work on the Policy Manual and User Manual pages on the MN DHS website.
+
 # Features
 Converts "JavaScript" links to traditional HTML links, allowing for right-click "Open in new tab".
 <img width="1238" height="158" alt="JS link to HTML link" src="https://github.com/user-attachments/assets/6b47f47a-3d54-443c-9a1a-c6f8b811ab94" />
