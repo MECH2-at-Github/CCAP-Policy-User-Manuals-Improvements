@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         CCAP Policy & User Manual Improvements
-// @version      v.02
+// @version      v.03
 // @description  Changes javascript links to HTML links (for new tabs), adds/updates links to statute.
 // @author       MECH2
 // @include      https://www.dhs.state.mn.us/main/idcplg?IdcService=GET_DYNAMIC_CONVERSION&RevisionSelectionMethod=LatestReleased&dDocName=ccap*
 // @include      https://www.dhs.state.mn.us/main/idcplg?IdcService=GET_DYNAMIC_CONVERSION&RevisionSelectionMethod=LatestReleased&dDocName=MECC-001609*
 // @grant        none
 // ==/UserScript==
-console.log("CCAP Policy & User Manuals Improvements - loaded")
+console.time("CCAP Policy & User Manuals Improvements")
 !function jsLinksToHrefLinks() {
     Array.from(document.querySelectorAll('#mainContent a'))
         ?.filter(a => a.href.indexOf("javascript:link") > -1)
@@ -26,6 +26,7 @@ console.log("CCAP Policy & User Manuals Improvements - loaded")
         ["142E.10", "Financial: Eligibility, Providers, Care-in-Home"],
         ["142E.11", "Service Authorizations"],
         ["142E.12", "Activity Eligibility"],
+        ["142E.13", "Extended Eligibility & Authorization"],
         ["142E.14", "County Contribution"],
         ["142E.15", "BSF Sliding Scale"],
         ["142E.17", "CCAP Rates"],
@@ -46,6 +47,7 @@ console.log("CCAP Policy & User Manuals Improvements - loaded")
         ["3400.0110", "Authorizations and Payments"],
         ["3400.0120", "Provider Requirements"],
         ["3400.0170", "Income Eligibility"],
+        ["3400.0175", "Extended Eligibility"],
         ["3400.0180", "Redetermination of Eligibility"],
         ["3400.0185", "Notice Requirements"],
     ]);
@@ -156,11 +158,10 @@ console.log("CCAP Policy & User Manuals Improvements - loaded")
         : [ 'https://www.revisor.mn.gov/rules/', textContent?.match(/Minnesota Rule[s]? ([0-9]+.[0-9]+).*/i)[1], textContent?.split(/Minnesota Rule[s]? /)[1], "Minnesota Rules" ]
     };
 }();
-
-function createNewEle(nodeName, attribObj={}, htmlDataArr=[]) {
-    let newEle = Object.assign(document.createElement(nodeName), attribObj)
-    if (htmlDataArr.length) {
-        htmlDataArr.forEach(([dataName, dataValue]) => { newEle.dataset[dataName] = dataValue });
-    };
-    return newEle
+function verbose() { console.info( ...arguments, "  (Verbose line: " + ((new Error).stack.split('\n')[1].split(':').reverse()[1]-1) + ")" ) };
+function createNewEle(nodeName, attribObj={}, dataObj={}) {
+    let newEle = Object.assign(document.createElement(nodeName), attribObj);
+    Object.entries(dataObj)?.forEach(([dataName, dataValue] = []) => { newEle.dataset[dataName] = dataValue })
+    return newEle;
 };
+console.timeEnd("CCAP Policy & User Manuals Improvements")
