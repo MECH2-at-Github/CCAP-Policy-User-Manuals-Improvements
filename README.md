@@ -15,10 +15,5 @@ Converts Statute to links, and adds context for most sections of statute.
 # Install instructions:
 (Must have a UserScript extension installed, such as TamperMonkey)
 
-Click the link above this ReadMe
-<img width="1160" height="298" alt="Manual Improver Install 1" src="https://github.com/user-attachments/assets/e49ca0f5-d7c5-4a3f-a8b9-7ec9c9e07b01" />
-
-On the page that loads, click the "Raw" button:
-<img width="946" height="462" alt="Manual Improver Install 2" src="https://github.com/user-attachments/assets/ba805876-225e-492f-a94c-aea9bd033ce9" />
-
-Your UserScript extension should prompt you to confirm that you want to install the script.
+* Click this link: [CCAP Policy User Manuals Improvements](https://github.com/MECH2-at-Github/CCAP-Policy-User-Manuals-Improvements/raw/refs/heads/main/CCAP-Policy-User-Manuals-Improvements.user.js)
+* Your UserScript extension should prompt you to confirm that you want to install the script.
