@@ -1,4 +1,4 @@
-This script is designed to work on the Policy Manual and User Manual pages on the MN DHS website.
+This script is designed to work on the CCAP/MEC2 Policy Manual and User Manual pages on the MN DHS website.
 
 # Features
 Converts "JavaScript" links to traditional HTML links, allowing for right-click "Open in new tab".
